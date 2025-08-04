@@ -1,0 +1,8 @@
+logs/
+.venv/
+.env
+*.egg-info/
+proprietary/*
+__pycache__/
+*.py[cod]
+!.gitkeep

@@ -1,0 +1,1 @@
+This template provides the rudimentary framework for Python projects within the Talan ECBU. For any questions please consult David Huang at David.Huang@talan.com. The included notebooks directory and Makefile are optional.
