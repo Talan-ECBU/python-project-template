@@ -17,10 +17,12 @@ LOG_DIR.mkdir(parents=True, exist_ok=True)
 # TODO: change your application name here
 APP_NAME = os.getenv("APP_NAME", "Your App")
 
+
 # Filter class for filtering info logs
 class InfoFilter(logging.Filter):
     def filter(self, record):
         return record.levelno == logging.INFO
+
 
 # Formatter configurations
 formatters = {
@@ -49,7 +51,7 @@ handlers = {
         "formatter": "simple",
         "level": "INFO",
         "stream": sys.stdout,
-        "filters": ["info_filter"]
+        "filters": ["info_filter"],
     },
     "console_error": {
         "class": "logging.StreamHandler",
@@ -71,7 +73,7 @@ handlers = {
         "formatter": "verbose",
         "level": "WARNING",
         "filename": str(LOG_DIR / f"{APP_NAME}_errors.log"),
-        "maxBytes": 5 * 1024 * 1024, # 5 MB
+        "maxBytes": 5 * 1024 * 1024,  # 5 MB
         "backupCount": 7,
         "encoding": "utf-8",
     },
@@ -82,7 +84,10 @@ loggers = {
     "__main__": {
         "level": "DEBUG",
         "handlers": [
-            "file_debug", "console_info", "console_error", "file_error"
+            "file_debug",
+            "console_info",
+            "console_error",
+            "file_error",
         ],
         "propagate": False,
     }
@@ -102,6 +107,7 @@ LOGGING_CONFIG = {
     },
 }
 
+
 def setup_logging():
     try:
         logging.config.dictConfig(LOGGING_CONFIG)
@@ -119,8 +125,10 @@ def setup_logging():
         logging.basicConfig(
             level=logging.INFO,
             format="%(levelname)s %(message)s",
-            stream=sys.stdout
+            stream=sys.stdout,
         )
         fallback_logger = logging.getLogger(__name__)
-        fallback_logger.error("Failed to configure logging, using basic config")
+        fallback_logger.error(
+            "Failed to configure logging, using basic config"
+        )
         fallback_logger.error(f"Error: {e}")
