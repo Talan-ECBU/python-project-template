@@ -20,14 +20,12 @@ else
 	MKDIR = mkdir -p $1
 endif
 
-.PHONY: help init install reset-kernel jupyter clean test format
+.PHONY: help init install reset-kernel clean test format
 
 help:
 	@echo Available targets:
 	@echo "  make init           Create virtual environment and install dependencies"
 	@echo "  make install        Install project and dev tools"
-	@echo "  make reset-kernel   Register Jupyter kernel for project"
-	@echo "  make jupyter        Launch Jupyter Notebook"
 	@echo "  make format         Format code with black"
 	@echo "  make test           Run tests"
 	@echo "  make clean          Remove __pycache__ and checkpoints"
@@ -48,9 +46,6 @@ init-dev:
 reset-kernel:
 	$(PYTHON) -m ipykernel install --user --name=$(KERNEL_NAME) --display-name="$(KERNEL_NAME)"
 
-jupyter:
-	cd $(NOTEBOOK_DIR) && $(PYTHON) -m notebook
-
 format: init-dev
 	$(PYTHON) -m black $(SRC_DIR)
 	$(PYTHON) -m black $(NOTEBOOK_DIR) --ipynb
@@ -60,12 +55,12 @@ test:
 
 clean:
 	@echo Cleaning __pycache__ and .ipynb_checkpoints...
-ifeq ($(OS),Windows_NT)
-	@for /d /r . %%d in (__pycache__) do @if exist "%%d" rmdir /s /q "%%d" 2>nul || echo.
-	@for /d /r . %%d in (.ipynb_checkpoints) do @if exist "%%d" rmdir /s /q "%%d" 2>nul || echo.
-	@del /s /q *.pyc 2>nul || echo.
-else
-	@find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
-	@find . -type d -name ".ipynb_checkpoints" -exec rm -rf {} + 2>/dev/null || true
-	@find . -name "*.pyc" -delete 2>/dev/null || true
-endif
+	ifeq ($(OS),Windows_NT)
+		@for /d /r . %%d in (__pycache__) do @if exist "%%d" rmdir /s /q "%%d" 2>nul || echo.
+		@for /d /r . %%d in (.ipynb_checkpoints) do @if exist "%%d" rmdir /s /q "%%d" 2>nul || echo.
+		@del /s /q *.pyc 2>nul || echo.
+	else
+		@find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
+		@find . -type d -name ".ipynb_checkpoints" -exec rm -rf {} + 2>/dev/null || true
+		@find . -name "*.pyc" -delete 2>/dev/null || true
+	endif

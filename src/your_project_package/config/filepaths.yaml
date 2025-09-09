@@ -1,0 +1,3 @@
+file group:
+  file subgroup: # This can be however many level deep as you want
+    file name: "path relative to project root"
